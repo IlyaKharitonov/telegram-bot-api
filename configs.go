@@ -1041,6 +1041,31 @@ func (config EditMessageCaptionConfig) method() string {
 	return "editMessageCaption"
 }
 
+type EditMessageMediaGroupConfig struct {
+	BaseEdit
+
+	Media []interface{}
+}
+
+func (EditMessageMediaGroupConfig) method() string {
+	return "editMessageMedia"
+}
+
+func (config EditMessageMediaGroupConfig) params() (Params, error) {
+	params, err := config.BaseEdit.params()
+	if err != nil {
+		return params, err
+	}
+
+	err = params.AddInterface("media", prepareInputMediaForParams(config.Media))
+
+	return params, err
+}
+
+func (config EditMessageMediaGroupConfig) files() []RequestFile {
+	return prepareInputMediaForFiles(config.Media)
+}
+
 // EditMessageMediaConfig allows you to make an editMessageMedia request.
 type EditMessageMediaConfig struct {
 	BaseEdit
